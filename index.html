@@ -401,6 +401,13 @@ document.getElementById('runBtn').addEventListener('click', () => {
   renderResults(matches);
 });
 
+function timestampedFilename() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const stamp = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + '_' + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds());
+  return 'Matched_Work_Orders_' + stamp + '.xlsx';
+}
+
 function buildResultDataUri(matches) {
   const aoa = [['Work Order Id', 'Assigned Resource'], ...matches];
   const ws = XLSX.utils.aoa_to_sheet(aoa);
@@ -414,6 +421,7 @@ function buildResultDataUri(matches) {
 function renderResults(matches) {
   const body = document.getElementById('resultsBody');
   const previewCount = Math.min(matches.length, 25);
+  const filename = timestampedFilename();
   let html = '<div class="count-row"><span class="n mono">' + matches.length + '</span><span class="label">Matched Work Order' + (matches.length === 1 ? '' : 's') + '</span></div>';
   html += '<table><thead><tr><th>Work Order Id</th><th>Assigned Resource</th></tr></thead><tbody>';
   for (let i = 0; i < previewCount; i++) {
@@ -423,7 +431,7 @@ function renderResults(matches) {
   if (matches.length > previewCount) {
     html += '<div class="preview-note">Showing first ' + previewCount + ' of ' + matches.length + ' matches.</div>';
   }
-  html += '<a class="download-btn" id="downloadBtn" download="Matched_Work_Orders.xlsx" href="' + buildResultDataUri(matches) + '">Download Matched_Work_Orders.xlsx</a>';
+  html += '<a class="download-btn" id="downloadBtn" download="' + filename + '" href="' + buildResultDataUri(matches) + '">Download ' + filename + '</a>';
   body.innerHTML = html;
   document.getElementById('resultsCard').classList.add('show');
 }
