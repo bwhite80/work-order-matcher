@@ -145,7 +145,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
     <div class="dropzone" id="drop1">
       <input type="file" id="file1" accept=".xlsx,.xls,.csv">
       <div class="label">Work Order Spreadsheet</div>
-      <div class="hint">Header row must include: Employee, Completed Date, Status, Work Order Id (any order; other columns ignored)</div>
+      <div class="hint">Header row must include: Assigned Resource, Completed Date, Status, Work Order Id (any order; other columns ignored)</div>
       <div class="filename" id="name1"></div>
     </div>
   </div>
@@ -158,7 +158,12 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
 </div>
 
 <script>
-const REQUIRED_HEADERS = ['employee', 'completed date', 'status', 'work order id'];
+const FIELD_DEFS = [
+  { key: 'employee', header: 'assigned resource' },
+  { key: 'completedDate', header: 'completed date' },
+  { key: 'status', header: 'status' },
+  { key: 'workOrderId', header: 'work order id' }
+];
 const PREVIEW_LIMIT = 25;
 
 let workbook = null;
@@ -251,11 +256,11 @@ function resolveHeaders(headerRow) {
   });
   const resolved = {};
   const missing = [];
-  for (const name of REQUIRED_HEADERS) {
-    if (lookup.has(name)) {
-      resolved[name] = lookup.get(name);
+  for (const field of FIELD_DEFS) {
+    if (lookup.has(field.header)) {
+      resolved[field.key] = lookup.get(field.header);
     } else {
-      missing.push(name);
+      missing.push(field.header);
     }
   }
   return { resolved, missing };
@@ -295,13 +300,13 @@ document.getElementById('runBtn').addEventListener('click', () => {
   const groups = new Map(); // key: date|employee -> { date, employee, count, ids: Set }
 
   for (const r of dataRows) {
-    const status = norm(r[resolved['status']]).toLowerCase();
+    const status = norm(r[resolved.status]).toLowerCase();
     if (status !== 'completed') continue;
     completedCount++;
 
-    const employee = norm(r[resolved['employee']]);
-    const workOrderId = norm(r[resolved['work order id']]);
-    const dateKey = dayKeyFromValue(r[resolved['completed date']], date1904);
+    const employee = norm(r[resolved.employee]);
+    const workOrderId = norm(r[resolved.workOrderId]);
+    const dateKey = dayKeyFromValue(r[resolved.completedDate], date1904);
 
     if (!employee || !workOrderId || !dateKey) {
       skippedCount++;
