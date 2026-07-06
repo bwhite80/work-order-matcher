@@ -301,7 +301,7 @@ document.getElementById('runBtn').addEventListener('click', () => {
 
   for (const r of dataRows) {
     const status = norm(r[resolved.status]).toLowerCase();
-    if (status !== 'completed') continue;
+    if (status !== 'fldcompleted') continue;
     completedCount++;
 
     const employee = norm(r[resolved.employee]);
@@ -326,7 +326,7 @@ document.getElementById('runBtn').addEventListener('click', () => {
   }
 
   if (completedCount === 0) {
-    setStatus('No rows with Status "Completed" were found in this file.', 'error');
+    setStatus('No rows with Status "FLDCompleted" were found in this file.', 'error');
     return;
   }
 
