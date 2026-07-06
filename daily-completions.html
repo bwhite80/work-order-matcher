@@ -145,7 +145,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
     <div class="dropzone" id="drop1">
       <input type="file" id="file1" accept=".xlsx,.xls,.csv">
       <div class="label">Work Order Spreadsheet</div>
-      <div class="hint">Header row must include: Assigned Resource, Completed Date, Status, Work Order Id (any order; other columns ignored)</div>
+      <div class="hint">Header row must include: Assigned Resource, Completion Date, Status, Work Order Id (any order; other columns ignored)</div>
       <div class="filename" id="name1"></div>
     </div>
   </div>
@@ -160,7 +160,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
 <script>
 const FIELD_DEFS = [
   { key: 'employee', header: 'assigned resource' },
-  { key: 'completedDate', header: 'completed date' },
+  { key: 'completedDate', header: 'completion date' },
   { key: 'status', header: 'status' },
   { key: 'workOrderId', header: 'work order id' }
 ];
@@ -333,7 +333,7 @@ document.getElementById('runBtn').addEventListener('click', () => {
   const flat = Array.from(groups.values()).map(g => [g.date, g.employee, g.count]);
   if (flat.length === 0) {
     setStatus(
-      'Found ' + completedCount + ' completed work order(s), but none had a usable Employee, Completed Date, and Work Order Id.',
+      'Found ' + completedCount + ' completed work order(s), but none had a usable Assigned Resource, Completion Date, and Work Order Id.',
       'error'
     );
     return;
